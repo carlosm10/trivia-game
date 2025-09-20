@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>El Camino a Cristo - Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #efedfe;
+      color: #6f67b6;
+      text-align: center;
+      margin: 0;
+    }
+    h1 {
+      margin: 20px 0;
+    }
+    #image1{
+        max-height: 10px;
+        max-width: 10px;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr); /* 6 columns for 30 tiles */
+      gap: 10px;
+      width: 90%;
+      margin: auto;
+    }
+    .tile {
+      background: #8a7ef5;
+      color: white;
+      border: 2px solid #fff;
+      border-radius: 10px;
+      padding: 30px;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .tile.used {
+      background: #f7f5ff;
+      color: #555;
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+    #questionBox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #efedfe;
+      color: white;
+      z-index: 1000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #questionText {
+      font-size: 5em;
+      margin: 20px;
+      max-width: 80%;
+      color: #6f67b6;
+      border: solid;
+      padding: 15px;
+    }
+    #answerText {
+      font-size: 4em;
+      margin: 20px;
+      max-width: 80%;
+      color: #8a7ef5;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #seeAnswerBtn {
+      background: #6f67b6;
+      color: white;
+    }
+    #closeBtn {
+      background: #6f67b6;
+      color: white;
+      margin-top: 40px;
+    }
+    #resetBtn {
+      background: #6f67b6;
+      color: white;
+      margin: 20px;
+      margin-top: 40px;
+    }
+    #footer {
+      font-size: x-small;
+    }
+  </style>
+</head>
+<body>
+    <div id="header">
+        <!-- <img id="image1" src="IMG_2352.PNG" alt="Arch"> -->
+        <h1 id="title">El Camino a Cristo</h1>
+    </div>
+  
+
+  <!-- Board visible at start -->
+  <div id="board"></div>
+
+  <!-- Fullscreen Question Box -->
+  <div id="questionBox">
+    <p id="questionText"></p>
+    <p id="answerText" style="display:none;"></p>
+    <button id="seeAnswerBtn" onclick="seeAnswer()">Ver Respuesta</button>
+    <button id="closeBtn" style="display:none;" onclick="closeQuestion()">Cerrar Pregunta</button>
+  </div>
+  
+  <button id="resetBtn" onclick="resetGame()">Reiniciar Juego</button>
+  <!-- <button id="lastKillBtn" onclick="lastKill()">Desempate</button>
+  <button id="backToGame" onclick="backToNormal()">Juego Normal</button> -->
+  <script src="preguntas.js" type="text/javascript"></script>
+  <!-- <script src="preguntas-desempate.js" type="text/javascript"></script> -->
+  <script>
+    // Load saved progress or start fresh
+    let gameData = JSON.parse(localStorage.getItem("numberedQuiz")) || defaultData;
+
+    function saveProgress() {
+      localStorage.setItem("numberedQuiz", JSON.stringify(gameData));
+    }
+
+    function renderBoard() {
+      const board = document.getElementById("board");
+      board.innerHTML = "";
+
+      gameData.forEach((item, i) => {
+        let tile = document.createElement("div");
+        tile.className = "tile";
+        tile.innerText = i + 1;
+        tile.setAttribute("id", i + 1);
+
+        if (item === null) {
+          tile.classList.add("used");
+        } else {
+          tile.onclick = () => showQuestion(i, tile);
+        }
+        board.appendChild(tile);
+      });
+    }
+
+    let currentIndex = null;
+
+    function showQuestion(index, tile) {
+      if (!gameData[index]) return;
+      currentIndex = index;
+
+      document.getElementById("questionText").innerText = gameData[index].pregunta;
+      document.getElementById("answerText").innerText = gameData[index].respuesta;
+      document.getElementById("answerText").style.display = "none";
+      document.getElementById("seeAnswerBtn").style.display = "inline-block";
+      document.getElementById("closeBtn").style.display = "none";
+
+      // Hide board, show question
+      document.getElementById("board").style.display = "none";
+      document.getElementById("questionBox").style.display = "flex";
+
+      // Mark as used
+      gameData[index] = null;
+      tile.classList.add("used");
+      saveProgress();
+    }
+
+    function seeAnswer() {
+      document.getElementById("answerText").style.display = "block";
+      document.getElementById("seeAnswerBtn").style.display = "none";
+      document.getElementById("closeBtn").style.display = "inline-block";
+    }
+
+    function closeQuestion() {
+      document.getElementById("questionBox").style.display = "none";
+      document.getElementById("board").style.display = "grid";
+    }
+
+    function resetGame() {
+      if (!confirm("Esta seguro de reiniciar el juego? Todas las preguntas volveran a ser habilitadas.")) return;
+      gameData = JSON.parse(JSON.stringify(defaultData));
+      saveProgress();
+      renderBoard();
+      document.getElementById("questionBox").style.display = "none";
+      document.getElementById("board").style.display = "grid";
+    }
+
+    function lastKill(){
+      const board = document.getElementById("board");
+      board.innerHTML = "";
+      let gameData = JSON.parse(localStorage.getItem("lastkill")) || defaultDataLastKill;
+      localStorage.setItem("lastkill", JSON.stringify(gameData));
+
+      gameData.forEach((item, i) => {
+        let tile = document.createElement("div");
+        tile.className = "tile";
+        tile.innerText = i + 1;
+        tile.setAttribute("id", i + 1);
+
+        if (item === null) {
+          tile.classList.add("used");
+        } else {
+          tile.onclick = () => showQuestion(i, tile);
+        }
+        board.appendChild(tile);
+      });
+      document.getElementById("lastKillBtn").style.display = "none";
+      document.getElementById("backToGame").style.display = "inline-block";
+    }
+
+    function backToNormal(){
+        renderBoard();
+        document.getElementById("backToGame").style.display = "none";
+        document.getElementById("lastKillBtn").style.display = "inline-block";
+    }
+
+    // Initialize
+    renderBoard();
+  </script>
+    <footer>
+        <p id="footer">&copy; 2025  <span class="made-with-love">Made with &#x2764; by Carlos & Esli</span> for Seventh Day Adventist Church use.
+        </p>
+    </footer>
+</body>
+</html>
