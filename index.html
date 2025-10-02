@@ -14,6 +14,9 @@
     h1 {
       margin: 20px 0;
     }
+    #header{
+      min-height: 10%;
+    }
     #image1{
         max-height: 10px;
         max-width: 10px;
@@ -24,14 +27,15 @@
       gap: 10px;
       width: 90%;
       margin: auto;
+      min-height: 60%;
     }
     .tile {
       background: #8a7ef5;
       color: white;
       border: 2px solid #fff;
       border-radius: 10px;
-      padding: 30px;
-      font-size: 1.5em;
+      padding: 25px;
+      font-size: 1.3em;
       cursor: pointer;
       transition: background 0.3s;
     }
@@ -55,19 +59,38 @@
       justify-content: center;
       align-items: center;
     }
+    #questionType{
+      font-size: 4em;
+      margin: 15px;
+      max-width: 80%;
+      color: black;
+      /* border: solid; */
+      padding: 15px;
+    }
     #questionText {
-      font-size: 5em;
+      font-size: 4em;
       margin: 20px;
       max-width: 80%;
       color: #6f67b6;
-      border: solid;
-      padding: 15px;
+      /* border: solid; */
+      padding: 10px;
+    }
+    #possibleAnswers{
+      font-size: 4em;
+      margin: 10px;
+      max-width: 80%;
+      color: #6f67b6;
+      /* border: solid; */
+      padding: 5px;
+      list-style: none;
     }
     #answerText {
       font-size: 4em;
       margin: 20px;
+      border: solid;
       max-width: 80%;
       color: #8a7ef5;
+      padding: 5px;
     }
     button {
       margin: 10px;
@@ -90,26 +113,32 @@
       background: #6f67b6;
       color: white;
       margin: 20px;
-      margin-top: 40px;
+      /* margin-top: 40px; */
     }
     #footer {
       font-size: x-small;
+      min-height: 20%;
     }
   </style>
 </head>
 <body>
-    <div id="header">
-        <!-- <img id="image1" src="IMG_2352.PNG" alt="Arch"> -->
-        <h1 id="title">El Camino a Cristo</h1>
-    </div>
-  
-
+  <div id="header">
+    <h1 id="title">El Camino a Cristo</h1>
+  </div>
   <!-- Board visible at start -->
   <div id="board"></div>
 
   <!-- Fullscreen Question Box -->
   <div id="questionBox">
+    <p id="questionType"></p>
     <p id="questionText"></p>
+    <!-- <p id="possibleAnswers" style="display:none;"></p> -->
+     <ul id="possibleAnswers" style="display:none;">
+      <li id="answerA"></li>
+      <li id="answerB"></li>
+      <li id="answerC"></li>
+      <li id="answerD"></li>
+     </ul>
     <p id="answerText" style="display:none;"></p>
     <button id="seeAnswerBtn" onclick="seeAnswer()">Ver Respuesta</button>
     <button id="closeBtn" style="display:none;" onclick="closeQuestion()">Cerrar Pregunta</button>
@@ -153,8 +182,18 @@
       if (!gameData[index]) return;
       currentIndex = index;
 
+      document.getElementById("questionType").innerText = gameData[index].instruction;
       document.getElementById("questionText").innerText = gameData[index].pregunta;
       document.getElementById("answerText").innerText = gameData[index].respuesta;
+      if(gameData[index].type == 4){
+        document.getElementById("answerA").innerText = gameData[index].opciones[0];
+        document.getElementById("answerB").innerText = gameData[index].opciones[1];
+        document.getElementById("answerC").innerText = gameData[index].opciones[2];
+        document.getElementById("answerD").innerText = gameData[index].opciones[3];
+        document.getElementById("possibleAnswers").style.display = "inline-block";
+      } else {
+        document.getElementById("possibleAnswers").style.display = "none";
+      }
       document.getElementById("answerText").style.display = "none";
       document.getElementById("seeAnswerBtn").style.display = "inline-block";
       document.getElementById("closeBtn").style.display = "none";
@@ -172,6 +211,7 @@
     function seeAnswer() {
       document.getElementById("answerText").style.display = "block";
       document.getElementById("seeAnswerBtn").style.display = "none";
+      document.getElementById("possibleAnswers").style.display = "none";
       document.getElementById("closeBtn").style.display = "inline-block";
     }
 

@@ -1,17 +1,48 @@
 const defaultData = [
   {
-    pregunta: "Cual es el titulo del libro?", 
-    respuesta: "El Camino a Cristo"
+    type: 1,
+    instruction: "Pregunta Directa",
+    pregunta: "¿Qué tipo de oración es la vida del alma?", 
+    respuesta: "la oración privada"
   },
   {
-    pregunta: "Pregunta 2 ?", 
-    respuesta: "Respuesta 2"
+    type: 2,
+    instruction: "Falso o Verdadero",
+    pregunta: "Hay personas que han conocido el amor perdonador de Cristo y no desean realmente ser hijos de Dios.", 
+    respuesta: "Falso"
   },
   {
-    pregunta: "Pregunta 3 ?", 
-    respuesta: "Respuesta 3"
+    type: 3,
+    instruction: "Completa la frase",
+    pregunta: "Si le contemplamos constantemente “somos _____ a su semejanza con mas y mas gloria en la misma _____, como por el Espíritu del Señor”. 2 Corintios 3:18", 
+    respuesta: "transformados, imagen"
   },
   {
+    type: 4,
+    instruction: "Opción Multiple",
+    pregunta: "¿Dónde nos guía el conocimiento del plan de la salvación?", 
+    opciones: [
+      "A) A la iglesia del Señor",
+      "B) A la patria celestial",
+      "C) Al pie de la cruz",
+      "D) Al nuevo Edén"
+    ],
+    respuesta: "C) Al pie de la cruz"
+  },
+  {
+    type: 2,
+    instruction: "Falso o Verdadero",
+    pregunta: "Hay personas que han conocido el amor perdonador de Cristo y no desean realmente ser hijos de Dios.", 
+    respuesta: "Falso"
+  },
+  {
+    type: 1,
+    instruction: "Pregunta Directa",
+    pregunta: "¿Qué tipo de oración es la vida del alma?", 
+    respuesta: "la oración privada"
+  },
+  {
+    tipo: "Completa la Frase",
     pregunta: "Pregunta 4 ?", 
     respuesta: "Respuesta 4"
   },
