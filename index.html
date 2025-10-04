@@ -15,29 +15,45 @@
       margin: 20px 0;
     }
     #header{
-      min-height: 10%;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* keeps title centered overall */
+      gap: 16px;
+      padding: 16px 24px;
+      min-height: 100px;       /* extra space at top for title+logo */
+    }
+    #logo{
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
     }
     #image1{
         max-height: 10px;
         max-width: 10px;
     }
+    /* 10 columns × 3 rows */
     #board {
       display: grid;
-      grid-template-columns: repeat(6, 1fr); /* 6 columns for 30 tiles */
+      grid-template-columns: repeat(10, 1fr);  /* 10 across */
+      grid-auto-rows: 1fr;                     /* 3 rows driven by content */
       gap: 10px;
-      width: 90%;
-      margin: auto;
-      min-height: 60%;
+      width: 95%;
+      margin: 0 auto 16px auto;
+      max-width: 1400px;
     }
+    /* Keep tiles square and responsive */
     .tile {
       background: #8a7ef5;
       color: white;
       border: 2px solid #fff;
       border-radius: 10px;
-      padding: 25px;
+      padding: 0;                /* remove padding so squares stay true */
       font-size: 1.3em;
       cursor: pointer;
       transition: background 0.3s;
+      aspect-ratio: 1 / 1;       /* perfect squares */
+      display: grid;
+      place-items: center;       /* center the number */
     }
     .tile.used {
       background: #f7f5ff;
@@ -119,10 +135,167 @@
       font-size: x-small;
       min-height: 20%;
     }
+
+    /* ===== Answer-view layout & typography ===== */
+    #questionBox.answer-mode {
+      display: flex;                 /* already flex; reinforcing */
+      flex-direction: column;
+      justify-content: space-around;/* top question / middle answer / bottom button */
+      align-items: center;
+      /* padding: 40px 24px; */
+      gap: 24px;
+    }
+
+    /* Question at the top */
+    #questionBox.answer-mode #questionText {
+      font-size: 20px;               /* per spec */
+      line-height: 1.3;
+      margin: 0;
+      color: #000;                   /* readable */
+      text-align: center;
+    }
+
+    /* Big centered answer in the middle */
+    #questionBox.answer-mode #answerText {
+      display: block !important;     /* ensure it's visible */
+      font-size: 35px;               /* per spec */
+      font-weight: 800;
+      text-align: center;
+      color: #000;
+      border: none;                  /* remove previous border */
+      margin: 0 auto;                /* keep centered */
+      max-width: 90%;
+    }
+
+    /* Hide options when in answer mode */
+    #questionBox.answer-mode #possibleAnswers {
+      display: none !important;
+    }
+
+    /* Close button at the bottom */
+    #questionBox.answer-mode #closeBtn {
+      display: inline-block !important;
+      align-self: center;
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
+
+    /* Hide the 'Ver Respuesta' button in answer mode */
+    #questionBox.answer-mode #seeAnswerBtn {
+      display: none !important;
+    }
+
+    /* ===== Universal white background + black text while viewing Q/A ===== */
+    #questionBox.question-mode,
+    #questionBox.answer-mode {
+      background: #fff !important;
+      color: #000 !important;
+    }
+
+    /* ===== Base layout for QUESTION view (before seeing the answer) ===== */
+    #questionBox.question-mode {
+      display: flex;               /* ensure visible */
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      /* padding: 30px; */
+      gap: 24px;
+    }
+
+    /* Top-left type label (all types) */
+    #questionBox.question-mode #questionType {
+      align-self: flex-start;
+      font-size: clamp(0.8rem, 1.5vw, 14px);
+      color: #808080;              /* gray */
+      margin: 0 0 8px clamp(16px, 5vw, 48px);
+    }
+
+    /* Central question text (types 1–3 and 4) */
+    #questionBox.question-mode #questionText {
+      font-size: 35px;
+      font-weight: 800;
+      text-align: center;          /* Types 1–3 centered; type 4 is centered too */
+      margin: 0 auto;
+      max-width: 90%;
+    }
+
+    /* Main question */
+    #questionBox.question-mode #questionText,
+    #questionBox.answer-mode #answerText {
+      font-size: clamp(1.5rem, 4vw, 35px);
+      line-height: 1.2;
+      word-wrap: break-word;
+    }
+
+    /* Options list — only for type 4 (left-aligned, bold 25px) */
+    #questionBox.question-mode.type-4 #possibleAnswers {
+      /* display: block !important; */
+      align-self: center;
+      list-style: none;
+      padding: 0;
+      margin: 8px clamp(16px, 5vw, 48px) 0;
+      max-width: 90%;
+      text-align: left;
+    }
+    #questionBox.question-mode.type-4 #possibleAnswers li {
+      font-size: clamp(2rem, 3.5vw, 30px);
+      line-height: 1.2;
+      word-wrap: break-word;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    /* Hide options for types 1–3 */
+    #questionBox.question-mode:not(.type-4) #possibleAnswers {
+      display: none !important;
+    }
+
+    /* Buttons in question mode */
+    #questionBox.question-mode #seeAnswerBtn {
+      display: inline-block;
+      align-self: center;
+      margin-top: 24px;
+    }
+    #questionBox.question-mode #closeBtn,
+    #questionBox.question-mode #answerText {
+      display: none !important;    /* only visible in answer mode */
+    }
+
+    /* ===== Answer-view (from previous step) remains as you set ===== */
+    #questionBox.answer-mode {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      /* padding: 40px 24px; */
+      gap: 24px;
+    }
+    #questionBox.answer-mode #questionText {
+      font-size: clamp(1rem, 2vw, 25px);
+      line-height: 1.3;
+      margin: 0;
+      color: #000;
+      text-align: center;
+    }
+    #questionBox.answer-mode #answerText {
+      display: block !important;
+      font-size: 45px;
+      font-weight: 800;
+      text-align: center;
+      color: #6f67b6;
+      border: none;
+      margin: 0 auto;
+      max-width: 90%;
+    }
+    #questionBox.answer-mode #possibleAnswers { display: none !important; }
+    #questionBox.answer-mode #closeBtn { display: inline-block !important; }
+    #questionBox.answer-mode #seeAnswerBtn { display: none !important; }
+
   </style>
 </head>
 <body>
   <div id="header">
+    <img id="logo" src="IMG_2352.PNG" alt="Logo de El Camino a Cristo" />
     <h1 id="title">El Camino a Cristo</h1>
   </div>
   <!-- Board visible at start -->
@@ -145,13 +318,84 @@
   </div>
   
   <button id="resetBtn" onclick="resetGame()">Reiniciar Juego</button>
-  <!-- <button id="lastKillBtn" onclick="lastKill()">Desempate</button>
-  <button id="backToGame" onclick="backToNormal()">Juego Normal</button> -->
   <script src="preguntas.js" type="text/javascript"></script>
   <!-- <script src="preguntas-desempate.js" type="text/javascript"></script> -->
   <script>
+    // const defaultData = [
+    //   // 1) Direct (example from your data)
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "¿Qué tipo de oración es la vida del alma?", respuesta: "la oración privada" },
+
+    //   // 2) Multiple choice (example from your data)
+    //   { type: 4, instruction: "Opción Múltiple", pregunta: "¿Dónde nos guía el conocimiento del plan de la salvación?", opciones: [
+    //       "A) A la iglesia del Señor",
+    //       "B) A la patria celestial",
+    //       "C) Al pie de la cruz",
+    //       "D) Al nuevo Edén"
+    //     ], respuesta: "C) Al pie de la cruz" },
+
+    //   // 3) True/False (example from your data)
+    //   { type: 2, instruction: "Falso o Verdadero", pregunta: "Hay personas que han conocido el amor perdonador de Cristo y no desean realmente ser hijos de Dios.", respuesta: "Falso" },
+
+    //   // 4) Fill in the blank (example from your data)
+    //   { type: 3, instruction: "Completa la frase", pregunta: "Si le contemplamos constantemente “somos _____ a su semejanza con más y más gloria en la misma _____, como por el Espíritu del Señor”. 2 Corintios 3:18", respuesta: "transformados, imagen" },
+
+    //   // --- Placeholders (mixed order) ---
+    //   // 5) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 6) Multiple choice
+    //   { type: 4, instruction: "Opción Múltiple", pregunta: "", opciones: ["", "", "", ""], respuesta: "" },
+    //   // 7) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 8) True/False
+    //   { type: 2, instruction: "Falso o Verdadero", pregunta: "", respuesta: "" },
+    //   // 9) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 10) Fill in the blank
+    //   { type: 3, instruction: "Completa la frase", pregunta: "", respuesta: "" },
+    //   // 11) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 12) Multiple choice
+    //   { type: 4, instruction: "Opción Múltiple", pregunta: "", opciones: ["", "", "", ""], respuesta: "" },
+    //   // 13) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 14) True/False
+    //   { type: 2, instruction: "Falso o Verdadero", pregunta: "", respuesta: "" },
+    //   // 15) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 16) Fill in the blank
+    //   { type: 3, instruction: "Completa la frase", pregunta: "", respuesta: "" },
+    //   // 17) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 18) Multiple choice
+    //   { type: 4, instruction: "Opción Múltiple", pregunta: "", opciones: ["", "", "", ""], respuesta: "" },
+    //   // 19) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 20) True/False
+    //   { type: 2, instruction: "Falso o Verdadero", pregunta: "", respuesta: "" },
+    //   // 21) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 22) Fill in the blank
+    //   { type: 3, instruction: "Completa la frase", pregunta: "", respuesta: "" },
+    //   // 23) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 24) Multiple choice
+    //   { type: 4, instruction: "Opción Múltiple", pregunta: "", opciones: ["", "", "", ""], respuesta: "" },
+    //   // 25) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 26) True/False
+    //   { type: 2, instruction: "Falso o Verdadero", pregunta: "", respuesta: "" },
+    //   // 27) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 28) Multiple choice
+    //   { type: 4, instruction: "Opción Múltiple", pregunta: "", opciones: ["", "", "", ""], respuesta: "" },
+    //   // 29) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" },
+    //   // 30) Direct
+    //   { type: 1, instruction: "Pregunta Directa", pregunta: "", respuesta: "" }
+    // ];
+
     // Load saved progress or start fresh
-    let gameData = JSON.parse(localStorage.getItem("numberedQuiz")) || defaultData;
+    let gameData = JSON.parse(localStorage.getItem("numberedQuiz")) || [...defaultData];
 
     function saveProgress() {
       localStorage.setItem("numberedQuiz", JSON.stringify(gameData));
@@ -182,80 +426,93 @@
       if (!gameData[index]) return;
       currentIndex = index;
 
-      document.getElementById("questionType").innerText = gameData[index].instruction;
-      document.getElementById("questionText").innerText = gameData[index].pregunta;
-      document.getElementById("answerText").innerText = gameData[index].respuesta;
-      if(gameData[index].type == 4){
-        document.getElementById("answerA").innerText = gameData[index].opciones[0];
-        document.getElementById("answerB").innerText = gameData[index].opciones[1];
-        document.getElementById("answerC").innerText = gameData[index].opciones[2];
-        document.getElementById("answerD").innerText = gameData[index].opciones[3];
-        document.getElementById("possibleAnswers").style.display = "inline-block";
+      const qBox = document.getElementById("questionBox");
+      const qTypeEl = document.getElementById("questionType");
+      const qTextEl = document.getElementById("questionText");
+      const ansTextEl = document.getElementById("answerText");
+      const possEl = document.getElementById("possibleAnswers");
+      const seeBtn = document.getElementById("seeAnswerBtn");
+      const closeBtn = document.getElementById("closeBtn");
+
+      // Set content
+      const item = gameData[index];
+      const qType = item.type || 1;
+
+      qTypeEl.innerText = item.instruction || "";        // top-left gray label
+      qTextEl.innerText = item.pregunta || "";           // central big question
+      ansTextEl.innerText = item.respuesta || "";        // will show in answer-mode
+
+      // Options (type 4)
+      if (qType === 4 && Array.isArray(item.opciones)) {
+        const [a,b,c,d] = item.opciones;
+        document.getElementById("answerA").innerText = a || "";
+        document.getElementById("answerB").innerText = b || "";
+        document.getElementById("answerC").innerText = c || "";
+        document.getElementById("answerD").innerText = d || "";
+        possEl.style.display = "block"; // CSS may override per mode
       } else {
-        document.getElementById("possibleAnswers").style.display = "none";
+        possEl.style.display = "none";
       }
-      document.getElementById("answerText").style.display = "none";
-      document.getElementById("seeAnswerBtn").style.display = "inline-block";
-      document.getElementById("closeBtn").style.display = "none";
 
-      // Hide board, show question
+      // Ensure we're in "question mode" (not answer mode)
+      qBox.classList.remove("answer-mode","type-1","type-2","type-3","type-4");
+      qBox.classList.add("question-mode", `type-${qType}`);
+
+      // Button visibility for question view
+      ansTextEl.style.display = "none";
+      seeBtn.style.display = "inline-block";
+      closeBtn.style.display = "none";
+
+      // Show overlay, hide board
       document.getElementById("board").style.display = "none";
-      document.getElementById("questionBox").style.display = "flex";
+      qBox.style.display = "flex";
 
-      // Mark as used
+      // Mark tile as used and persist
       gameData[index] = null;
       tile.classList.add("used");
       saveProgress();
     }
 
     function seeAnswer() {
+      // Show answer text
       document.getElementById("answerText").style.display = "block";
-      document.getElementById("seeAnswerBtn").style.display = "none";
+      // Hide possible answers (if any) and the 'see answer' button
       document.getElementById("possibleAnswers").style.display = "none";
+      document.getElementById("seeAnswerBtn").style.display = "none";
+      // Ensure close button is visible
       document.getElementById("closeBtn").style.display = "inline-block";
+
+      // Apply "answer mode" layout (top question, big middle answer, bottom close)
+      document.getElementById("questionBox").classList.add("answer-mode");
     }
 
     function closeQuestion() {
+      // Exit answer mode layout
+      document.getElementById("questionBox").classList.remove("answer-mode");
+
+      // Hide the overlay and return to board
       document.getElementById("questionBox").style.display = "none";
       document.getElementById("board").style.display = "grid";
+
+      // Reset buttons/visibility for the next question view
+      document.getElementById("answerText").style.display = "none";
+      document.getElementById("seeAnswerBtn").style.display = "inline-block";
+      document.getElementById("closeBtn").style.display = "none";
     }
 
     function resetGame() {
       if (!confirm("Esta seguro de reiniciar el juego? Todas las preguntas volveran a ser habilitadas.")) return;
-      gameData = JSON.parse(JSON.stringify(defaultData));
+      gameData = [...defaultData];
+      localStorage.removeItem("numberedQuiz");
       saveProgress();
       renderBoard();
       document.getElementById("questionBox").style.display = "none";
       document.getElementById("board").style.display = "grid";
     }
 
-    function lastKill(){
-      const board = document.getElementById("board");
-      board.innerHTML = "";
-      let gameData = JSON.parse(localStorage.getItem("lastkill")) || defaultDataLastKill;
-      localStorage.setItem("lastkill", JSON.stringify(gameData));
-
-      gameData.forEach((item, i) => {
-        let tile = document.createElement("div");
-        tile.className = "tile";
-        tile.innerText = i + 1;
-        tile.setAttribute("id", i + 1);
-
-        if (item === null) {
-          tile.classList.add("used");
-        } else {
-          tile.onclick = () => showQuestion(i, tile);
-        }
-        board.appendChild(tile);
-      });
-      document.getElementById("lastKillBtn").style.display = "none";
-      document.getElementById("backToGame").style.display = "inline-block";
-    }
-
     function backToNormal(){
         renderBoard();
         document.getElementById("backToGame").style.display = "none";
-        document.getElementById("lastKillBtn").style.display = "inline-block";
     }
 
     // Initialize
